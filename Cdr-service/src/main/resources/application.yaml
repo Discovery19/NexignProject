@@ -1,0 +1,28 @@
+app:
+  generator:
+    number-files: 3
+    last-month: 12
+    year: 2024
+  scheduler:
+    enable: true
+    interval: 1m
+  topic: cdr-topic
+  bootstrap-server: localhost:9092
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+  application:
+    name: cdr-service
+#  kafka:
+#    bootstrap-servers: localhost:9092
+  datasource:
+    url: jdbc:postgresql://localhost:5432/transactions
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+server:
+  port: 8080

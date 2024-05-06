@@ -1,0 +1,23 @@
+app:
+  cdr-listener-topic: cdr-topic
+  brt-producer-topic: brt-topic
+  hrs-listener-topic: hrs-topic
+  hrs-producer-month-topic: hrs-month-topic
+  bootstrap-servers: localhost:9092
+spring:
+
+  application:
+    name: btr-service
+  kafka:
+    bootstrap-servers: localhost:9092
+  datasource:
+      url: jdbc:postgresql://localhost:5433/main
+      username: postgres
+      password: postgres
+      driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081

@@ -1,0 +1,26 @@
+app:
+#  scheduler:
+#    enable: true
+#    interval: 1m
+  brtListenerTopic: brt-topic
+  hrsProducerTopic: hrs-topic
+  hrsProducerMonthNotifTopic: hrs-month-topic
+  bootstrap-server: localhost:9092
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+  application:
+    name: hrs-service
+#  kafka:
+#    bootstrap-servers: localhost:9092
+  datasource:
+    url: jdbc:postgresql://localhost:5434/hrs
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+server:
+  port: 8082
