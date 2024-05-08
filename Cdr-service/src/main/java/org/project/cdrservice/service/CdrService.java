@@ -1,13 +1,13 @@
 package org.project.cdrservice.service;
 
 import lombok.RequiredArgsConstructor;
-//import org.project.cdrservice.kafka.KafkaRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.project.cdrservice.kafka.CdrRequest;
 import org.project.cdrservice.kafka.NotificationService;
 
 import org.project.cdrservice.model.Cdr;
 import org.project.cdrservice.repository.CdrRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -17,7 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class CdrService {
@@ -26,6 +26,7 @@ public class CdrService {
 
     public void processCdrFiles() {
 
+        log.info("processing files");
         String cdrFolderPath = "cdr_files";
         try {
             Files.walk(Paths.get(cdrFolderPath))
@@ -42,15 +43,10 @@ public class CdrService {
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
                 Cdr cdr = getCdr(fields);
-                log.info(String.valueOf(cdr.getType()));
-                log.info(String.valueOf(cdr.getStartCall()));
-                log.info(String.valueOf(cdr.getEndCall()));
-                log.info(String.valueOf(cdr.getContactNumber()));
-                log.info(String.valueOf(cdr.getAnotherNumber()));
                 cdr = cdrRepository.saveAndFlush(cdr);
                 log.info("cdr send " + cdr);
-                CdrRequest cdrRequest = new CdrRequest(cdr.getId(), cdr.getType(), cdr.getContactNumber(), cdr.getStartCall(), cdr.getEndCall());
-
+                CdrRequest cdrRequest = new CdrRequest(cdr.getId(), cdr.getType(), cdr.getContactNumber(), cdr.getAnotherNumber(), cdr.getStartCall(), cdr.getEndCall());
+                cdrRepository.saveAndFlush(cdr);
                 notificationService.sendNotification(cdrRequest);
             }
         } catch (IOException e) {

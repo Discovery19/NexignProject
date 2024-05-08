@@ -52,17 +52,17 @@ public class CdrGenerator {
         int numFiles = generator.numberFiles();
         int month = generator.lastMonth();
         int year = generator.year();
-        try (ExecutorService executor = Executors.newFixedThreadPool(numFiles)) {
+//        try (ExecutorService executor = Executors.newFixedThreadPool(numFiles)) {
 
             for (int i = 1; i <= numFiles; i++) {
                 String fileName = String.format("cdr_%02d_%d_%d.txt", month, year, i);
-                executor.submit(() -> generateCdrFile(fileName, month, year));
+                generateCdrFile(fileName, month, year);
             }
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-
-        } catch (InterruptedException e) {
-            log.error("Error while generating CDR files: " + e.getMessage());
-        }
+//            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+//
+//        } catch (InterruptedException e) {
+//            log.error("Error while generating CDR files: " + e.getMessage());
+//        }
     }
 
     private void generateCdrFile(String fileName, int month, int year) {

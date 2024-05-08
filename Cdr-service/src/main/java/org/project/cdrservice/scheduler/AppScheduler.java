@@ -15,6 +15,7 @@ public class AppScheduler {
     private final CdrService cdrService;
     @Scheduled(fixedDelayString = "#{@scheduler.interval()}")
     public void update() {
+        log.info("scheduler");
         generator.generateCdrFiles();
         cdrService.processCdrFiles();
     }

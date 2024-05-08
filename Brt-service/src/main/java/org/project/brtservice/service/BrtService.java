@@ -53,16 +53,24 @@ public class BrtService {
 
     public Optional<BrtRequest> authorize(CdrRequest request) {
         Optional<User> user = userRepository.findById(request.number());
+        boolean flagAbonent = userRepository.findById(request.anotherNumber()).isPresent();
         Optional<BrtRequest> brtRequest = Optional.empty();
         if (user.isPresent()) {
-            brtRequest = Optional.of(new BrtRequest(request.id(), request.type(), request.number(), request.start(), request.end(), user.get().getTariffId()));
+            brtRequest = Optional.of(new BrtRequest(request.id(), request.type(), request.number(), request.start(), request.end(), user.get().getTariffId(), flagAbonent));
         }
         return brtRequest;
     }
 
     public void balanceOperation(HrsRequest notification) {
         User user = userRepository.findById(notification.phone()).get();
-        user.setBalance(user.getBalance() - notification.debit());
+        var balance = user.getBalance() - notification.debit();
+        if (balance < -200) {
+            log.error("User " + notification.phone() + " balance is blocked");
+            user.setBalance(-200);
+
+        } else {
+            user.setBalance(user.getBalance() - notification.debit());
+        }
         userRepository.saveAndFlush(user);
     }
 
