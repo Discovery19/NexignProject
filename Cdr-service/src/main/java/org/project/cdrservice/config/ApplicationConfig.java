@@ -16,7 +16,7 @@ public record ApplicationConfig(
         Scheduler scheduler,
         @Bean
         Generator generator,
-        String bootstrapServer,
+        String server,
         String topic
 ) {
     public record Scheduler(boolean enable,

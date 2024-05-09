@@ -5,18 +5,18 @@ app:
   brtListenerTopic: brt-topic
   hrsProducerTopic: hrs-topic
   hrsProducerMonthNotifTopic: hrs-month-topic
-  bootstrap-server: localhost:9092
+  server:
 spring:
-  kafka:
-    bootstrap-servers: localhost:9092
+#  kafka:
+#    bootstrap-servers: localhost:9092
   application:
     name: hrs-service
 #  kafka:
 #    bootstrap-servers: localhost:9092
   datasource:
-    url: jdbc:postgresql://localhost:5434/hrs
-    username: postgres
-    password: postgres
+#    url: jdbc:postgresql://nexign-postgresql3-1:5434/hrs
+#    username: postgres
+#    password: postgres
     driver-class-name: org.postgresql.Driver
 
   jpa:

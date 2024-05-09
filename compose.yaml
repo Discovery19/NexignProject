@@ -40,13 +40,21 @@ services:
   postgresql1:
     image: postgres:16
     ports:
-      - "5432:5432"
+      - "5431:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready","-d","postgres","-U","postgres" ]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+      start_period: 5s
+    container_name: postgresql1
     environment:
       POSTGRES_DB: transactions
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgresql1:/var/lib/postgresql/data
+
   postgresql2:
     image: postgres:16
     ports:
@@ -55,18 +63,100 @@ services:
       POSTGRES_DB: main
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    container_name: postgresql2
+    healthcheck:
+      test: [ "CMD", "pg_isready","-d","postgres","-U","postgres" ]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+      start_period: 5s
     volumes:
       - postgresql2:/var/lib/postgresql/data
   postgresql3:
     image: postgres:16
     ports:
       - "5434:5432"
+
+    healthcheck:
+      test: [ "CMD", "pg_isready","-d","postgres","-U","postgres" ]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+      start_period: 5s
+    container_name: postgresql3
     environment:
       POSTGRES_DB: hrs
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgresql3:/var/lib/postgresql/data
+
+
+  hrs-service:
+    build:
+      context: ./Hrs
+      dockerfile: hrs.dockerfile
+    container_name: hrs-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgresql3
+      - kafka
+      - zoo
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql3:5432/hrs
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      APP_SERVER: kafka:9092
+
+  brt-service:
+    build:
+      context: ./Brt-service
+      dockerfile: brt.dockerfile
+    container_name: brt-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgresql2
+      - kafka
+      - zoo
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql2:5432/main
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      APP_SERVER: kafka:9092
+
+  crm-service:
+    build:
+      context: ./Crm
+      dockerfile: crm.dockerfile
+    container_name: crm-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgresql2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql2:5432/main
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+
+  cdr-service:
+    build:
+      context: ./Cdr-service
+      dockerfile: cdr.dockerfile
+    container_name: cdr-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql1
+      - kafka
+      - zoo
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql1:5432/transactions
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      APP_SERVER: kafka:9092
 
 volumes:
   postgresql1: {}

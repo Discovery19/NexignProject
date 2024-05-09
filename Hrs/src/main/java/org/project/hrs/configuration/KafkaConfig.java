@@ -30,7 +30,7 @@ public class KafkaConfig {
     @Bean
     public ProducerFactory<String, HrsRequest> producerFactory() {
         Map<String, Object> configs = new HashMap<>();
-        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.bootstrapServer());
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.server());
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
@@ -43,7 +43,7 @@ public class KafkaConfig {
     @Bean
     public ProducerFactory<String, MonthRequest> producerMonthFactory() {
         Map<String, Object> configs = new HashMap<>();
-        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.bootstrapServer());
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.server());
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
@@ -61,7 +61,7 @@ public class KafkaConfig {
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.bootstrapServer());
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.server());
         props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
         props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, StringDeserializer.class);
 
