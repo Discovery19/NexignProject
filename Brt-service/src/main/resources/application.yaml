@@ -3,14 +3,14 @@ app:
   brt-producer-topic: brt-topic
   hrs-listener-topic: hrs-topic
   hrs-producer-month-topic: hrs-month-topic
-  server:
+  server: # localhost:9092
 spring:
 
   application:
     name: btr-service
 
   datasource:
-#      url: jdbc:postgresql://nexign-postgresql2-1:5433/main
+#      url: jdbc:postgresql://localhost:5433/main
 #      username: postgres
 #      password: postgres
       driver-class-name: org.postgresql.Driver
@@ -20,3 +20,4 @@ spring:
 
 server:
   port: 8081
+

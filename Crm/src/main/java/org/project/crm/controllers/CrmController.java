@@ -11,32 +11,36 @@ import org.project.crm.dto.PayMsisdnBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+/**
+ * CrmController является контроллером Spring, который обрабатывает запросы, связанные с CRM-сервисом.
+ * Он реализует интерфейс CrmApi, определяя методы для сохранения информации об абоненте, оплаты услуг,
+ * изменения тарифа и проверки информации о пользователе.
+ * Контроллер использует сервис UserService для выполнения операций с пользователями.
+ * Необходима базовая аутентификация для доступа к контроллеру.
+ */
+
+
 @Controller
-@OpenAPIDefinition(info = @Info(title = "Foos API", version = "v1"))
 @SecurityRequirement(name = "basicAuth")
 @RequiredArgsConstructor
-//@RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CrmController implements CrmApi{
+public class CrmController implements CrmApi {
     private final UserService userService;
-    //manag
+
     @Override
     public ResponseEntity<?> savePost(InfoAbonent body) {
-        userService.createUser(body);
-        return ResponseEntity.ok("save post");
-    }
-    //user
-    @Override
-    public ResponseEntity<?> payMsisdnPatch(String msisdn, PayMsisdnBody body) {
-        userService.pay(Long.valueOf(msisdn), body.money());
-        return ResponseEntity.ok("pay");
+        return ResponseEntity.ok(userService.createUser(body));
     }
 
-    //manag
+    @Override
+    public ResponseEntity<?> payMsisdnPatch(String msisdn, PayMsisdnBody body) {
+        return ResponseEntity.ok(userService.pay(Long.valueOf(msisdn), body.money()));
+    }
+
     @Override
     public ResponseEntity<?> changeTariffMsisdnPatch(String msisdn, ChangeTariffMsisdnBody body) {
-        userService.changeTariff(Long.valueOf(msisdn), body.tariffId());
-        return ResponseEntity.ok("changeTariff");
+        return ResponseEntity.ok(userService.changeTariff(Long.valueOf(msisdn), body.tariffId()));
     }
+
     @Override
     public ResponseEntity<?> checkUser(String msisdn) {
         return ResponseEntity.ok(userService.getUser(Long.valueOf(msisdn)));

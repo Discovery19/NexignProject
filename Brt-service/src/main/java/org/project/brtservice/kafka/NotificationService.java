@@ -9,6 +9,16 @@ import org.project.brtservice.requests.MonthRequest;
 import org.project.brtservice.service.BrtService;
 import org.springframework.stereotype.Service;
 
+/**
+ * NotificationService представляет сервис для обработки уведомлений, связанных с системой BRT (Billing and Rating).
+ * Он получает уведомления в виде различных типов запросов (CdrRequest, HrsRequest, MonthRequest),
+ * обрабатывает их и отправляет соответствующие уведомления через QueueProducer.
+ * Метод processNotification(CdrRequest) выполняет авторизацию пользователя и отправляет уведомление,
+ * если авторизация успешна. Методы processNotification(HrsRequest) и processNotification(MonthRequest)
+ * выполняют операции с балансом пользователя или ежемесячными списаниями в зависимости от полученного запроса.
+ * Метод sendNotification(BrtRequest) отправляет уведомления о событиях в системе BRT через QueueProducer.
+ */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,7 +29,6 @@ public class NotificationService {
     public void processNotification(CdrRequest notification) {
         log.info(String.valueOf(notification));
         var authorizedUser = brtService.authorize(notification);
-        log.info("user "+authorizedUser);
         authorizedUser.ifPresent(this::sendNotification);
     }
     public void processNotification(HrsRequest notification) {

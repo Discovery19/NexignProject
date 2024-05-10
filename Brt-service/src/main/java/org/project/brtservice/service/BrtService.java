@@ -16,6 +16,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * BrtService предоставляет функциональность для выполнения операций в системе BRT (Billing and Rating).
+ * Он выполняет авторизацию пользователей, операции с балансом и ежемесячные списания.
+ * В методе authorize(CdrRequest) производится поиск пользователя по номеру и создание объекта BrtRequest
+ * для авторизованного пользователя. Методы balanceOperation(HrsRequest) и monthBalanceOperation(MonthRequest)
+ * осуществляют операции с балансом пользователей в зависимости от полученных запросов.
+ * Этот сервис является ключевым компонентом системы BRT и обеспечивает правильное расчетное и финансовое обслуживание.
+ */
+
 @Service
 @Slf4j
 @RequiredArgsConstructor

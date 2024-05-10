@@ -1,13 +1,18 @@
 package org.project.crm.service;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.project.crm.repository.UserRepository;
 import org.project.crm.dto.InfoAbonent;
 import org.project.crm.model.User;
+import org.project.crm.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+/**
+ * Сервис UserService предоставляет функциональность для работы с пользователями в системе CRM.
+ * Он обеспечивает операции по созданию, оплате, изменению тарифа и получению информации о пользователях.
+ * Данный сервис использует UserRepository для доступа к данным о пользователях в базе данных.
+ */
 
 @Service
 @RequiredArgsConstructor
@@ -19,25 +24,11 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    @PostConstruct
-    private void addto(){
-        User user =new User();
-        user.setId(79787478614L);
-        user.setTariffId(11L);
-        user.setBalance(100);
-        //user.setRole("USER");
-        createUser(user);
-        user =new User();
-        user.setId(1L);
-        user.setTariffId(0L);
-        user.setBalance(0);
-        //user.setRole("ADMIN");
-        createUser(user);
-    }
-    //test
+
     private User createUser(User testUser) {
         return userRepository.saveAndFlush(testUser);
     }
+
     public User createUser(InfoAbonent info) {
         User user = new User();
         user.setId(Long.valueOf(info.msisdn()));
@@ -45,23 +36,27 @@ public class UserService {
         user.setTariffId(info.tariffId());
         return userRepository.saveAndFlush(user);
     }
-    public void pay(Long msisdn, Integer money){
+
+    public String pay(Long msisdn, Integer money) {
         var u = userRepository.findById(msisdn).get();
         var balance = u.getBalance();
-        u.setBalance(balance+money);
+        u.setBalance(balance + money);
         userRepository.saveAndFlush(u);
+        return "New balance: " + balance + money;
     }
 
-    public void changeTariff(Long msisdn, Long tariffId) {
+    public String changeTariff(Long msisdn, Long tariffId) {
         var u = userRepository.findById(msisdn).get();
         u.setTariffId(tariffId);
         userRepository.saveAndFlush(u);
+        return "New tariff: " + tariffId;
     }
 
     public User getUser(Long msisdn) {
         return userRepository.findById(msisdn).get();
     }
-    public List<User> getAllUsersForScheduler(){
+
+    public List<User> getAllUsersForScheduler() {
         return userRepository.findAll();
     }
 }

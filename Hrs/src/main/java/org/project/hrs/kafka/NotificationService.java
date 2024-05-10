@@ -9,6 +9,15 @@ import org.project.hrs.requests.MonthRequest;
 import org.project.hrs.service.HrsService;
 import org.springframework.stereotype.Service;
 
+/**
+ * NotificationService представляет сервис для обработки уведомлений, связанных с системой управления ресурсами (HRS).
+ * Он принимает запросы BrtRequest, обрабатывает их с помощью сервиса HrsService и отправляет уведомления через
+ * QueueProducer. Метод processNotification() обрабатывает уведомления, вызывая методы сервиса для проверки месяцев
+ * и расчета тарифов, а затем отправляет соответствующие уведомления. Методы sendNotification() отправляют
+ * уведомления через QueueProducer.
+ */
+
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -17,7 +26,6 @@ public class NotificationService {
     private final QueueProducer queueProducer;
 
     public void processNotification(BrtRequest notification) {
-        System.out.println("gomic");
         log.info("process notification");
         log.info(String.valueOf(notification));
         var months = service.monthCheck(notification);
@@ -28,10 +36,6 @@ public class NotificationService {
         }
         var request = service.tariffCalculation(notification);
         sendNotification(request);
-        //var authorizedUser = service.authorize(notification);
-        //service.update(request);
-        //service
-        //authorizedUser.ifPresent(this::sendNotification);
     }
 
     public void sendNotification(HrsRequest notification) {

@@ -7,17 +7,16 @@ app:
     enable: true
     interval: 1m
   topic: cdr-topic
-  server:
+  server: #localhost:9092
 spring:
   application:
     name: cdr-service
 
   datasource:
-#    url: jdbc:postgresql://nexign-postgresql1-1:5432/transactions
+#    url: jdbc:postgresql://localhost:5432/transactions
 #    username: postgres
 #    password: postgres
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: create
