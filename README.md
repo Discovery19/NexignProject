@@ -91,12 +91,17 @@ server:
 Для Админа:
 
 ![image](https://github.com/Discovery19/NexignProject/assets/112725051/32e57acd-967d-4859-abfb-bf4a2fd88133)
+
 *Логин пароль менеджера*
+
 ![image](https://github.com/Discovery19/NexignProject/assets/112725051/edf32126-2d1f-40b8-9bca-badbd3a398cd)
 
 Для пользователя:
 
 ![image](https://github.com/Discovery19/NexignProject/assets/112725051/1f4b9662-e67f-4774-80ea-5b5dd113468e)
+
 *Логин пользователя вводится как часть строки, а пароль не нужен по заданию*
 
-Выше был приложен пример в Postman, но также можно сипользовать Swagger. Вот ссылка для него: *https://localhost:8083/swagger-ui.html*
+Выше был приложен пример в Postman, но также можно сипользовать Swagger. Вот ссылка для него:
+
+*https://localhost:8083/swagger-ui.html*
