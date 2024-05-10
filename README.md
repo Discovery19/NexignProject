@@ -42,3 +42,61 @@ HRS – High performance rating server.
 ![image](https://github.com/Discovery19/NexignProject/assets/112725051/6fe1cf07-e5d9-4ae1-82f3-67dcc42ca753)
 
 ![image](https://github.com/Discovery19/NexignProject/assets/112725051/6f9f6f8b-c8de-4a26-a547-40363556b364)
+
+### Схема взаимодействия сервисов ###
+
+![image](https://github.com/Discovery19/NexignProject/assets/112725051/8fec2d5b-2cfe-4fba-ba60-69837b642301)
+
+### Как работать с приложением ###
+**Запуск приложения**
+Выполните следующие команды))
+```
+docker compose -f compose.yaml build  
+docker compose -f compose.yaml up    
+```
+
+**Для запуска приложения, без собранных контейнеров в docker:**
+
+Для начала в application.yaml в каждом микросервисе раскоментируйте данные строчки:
+*Пример (BRT-service):*
+```app:
+  cdr-listener-topic: cdr-topic
+  brt-producer-topic: brt-topic
+  hrs-listener-topic: hrs-topic
+  hrs-producer-month-topic: hrs-month-topic
+  server: # localhost:9092                        #Здесь раскоментировать!
+spring:
+  application:
+    name: btr-service
+  datasource:
+#      url: jdbc:postgresql://localhost:5433/main  #Здесь раскоментировать!
+#      username: postgres                          #Здесь раскоментировать!
+#      password: postgres                          #Здесь раскоментировать!
+      driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
+```
+
+Затем выполните следующую команду
+
+```  docker compose -f compose_no_services.yaml up ```
+
+**Использование CRM:**
+> Для более наглядной работы советуется уменьшить длительность периода тарификации и количество файлов на каждый месяц в application.yaml (CDR)
+
+Для Админа:
+
+![image](https://github.com/Discovery19/NexignProject/assets/112725051/32e57acd-967d-4859-abfb-bf4a2fd88133)
+*Логин пароль менеджера*
+![image](https://github.com/Discovery19/NexignProject/assets/112725051/edf32126-2d1f-40b8-9bca-badbd3a398cd)
+
+Для пользователя:
+
+![image](https://github.com/Discovery19/NexignProject/assets/112725051/1f4b9662-e67f-4774-80ea-5b5dd113468e)
+*Логин пользователя вводится как часть строки, а пароль не нужен по заданию*
+
+Выше был приложен пример в Postman, но также можно сипользовать Swagger. Вот ссылка для него: *https://localhost:8083/swagger-ui.html*
